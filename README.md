@@ -216,4 +216,4 @@ Before submitting, please ensure:
 
 ## 📄 License
 
-[MIT](LICENSE) © 2026 Hermes
+[MIT](LICENSE) © 2026 JPHsystems
