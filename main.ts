@@ -687,7 +687,10 @@ class CalculatorModal extends Modal {
     const cursor = editor.getCursor();
     editor.replaceRange(text + "\n", cursor);
     editor.setCursor({ line: cursor.line + 1, ch: 0 });
-    new Notice("Inserted into note.");
+
+    // Also copy as plain text (e.g. "1+1 = 2")
+    const plainFormula = (this.expression || this.lastResult) + (result ? " = " + result : "");
+    this.writeClipboard_(plainFormula, "Inserted into note & copied to clipboard.");
   }
 
   // ─── Copy LaTeX ───────────────────────────────────────────
