@@ -179,11 +179,11 @@ sin(45) = 0.7071
 ### BRAT (beta)
 
 1. Install the [BRAT](https://github.com/TfTHacker/obsidian42-brat) plugin
-2. Add this repository: `https://github.com/<your-username>/obsidian-quick-calculator`
+2. Add this repository: `https://github.com/jphermans/obsidian-quick-calculator`
 
 ### Manual
 
-1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/<your-username>/obsidian-quick-calculator/releases)
+1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/jphermans/obsidian-quick-calculator/releases)
 2. Copy into `<Vault>/.obsidian/plugins/quick-calculator/`
 3. Enable in Settings → Community plugins
 
@@ -192,7 +192,7 @@ sin(45) = 0.7071
 ## 🔧 Building from source
 
 ```bash
-git clone https://github.com/<your-username>/obsidian-quick-calculator
+git clone https://github.com/jphermans/obsidian-quick-calculator
 cd obsidian-quick-calculator
 npm install
 npm run build   # production build
@@ -203,7 +203,7 @@ npm run dev     # watch mode — rebuilds on save
 
 ## 🤝 Contributing
 
-Pull requests welcome! If you find a bug or have a feature idea, please [open an issue](https://github.com/<your-username>/obsidian-quick-calculator/issues).
+Pull requests welcome! If you find a bug or have a feature idea, please [open an issue](https://github.com/jphermans/obsidian-quick-calculator/issues).
 
 Before submitting, please ensure:
 
