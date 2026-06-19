@@ -8,12 +8,8 @@
   <img src="https://img.shields.io/badge/parser-recursive%20descent-ff69b4?style=flat-square" alt="Parser">
 </p>
 
-<h1 align="center">🧮 Quick Calculator</h1>
-
-<p align="center"><strong>Instant calculations from anywhere in Obsidian — desktop &amp; mobile.</strong></p>
-
 <p align="center">
-  <img src="https://img.icons8.com/fluency/48/calculator.png" width="64" alt="Calculator icon">
+  <img src="banner.png" alt="Quick Calculator — Obsidian Plugin" width="960">
 </p>
 
 ---
