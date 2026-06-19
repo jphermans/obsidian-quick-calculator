@@ -14,11 +14,13 @@
 .qc-panel {
   display: flex;
   flex-direction: column;
-  padding: 0;
-  width: 100%;
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
   height: 100%;
   overflow: hidden;
   background: var(--background-primary);
+  margin: 0 !important;
 }
 
 .qc-panel .qc-header {

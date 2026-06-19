@@ -717,13 +717,16 @@ class CalculatorModal extends Modal {
   /** Open the Quick Calculator settings tab. */
   private openSettings_(): void {
     try {
-      const app = this.app as any;
-      if (app.setting && typeof app.setting.openTabById === "function") {
-        app.setting.openTabById("quick-calculator");
+      const anyApp = this.app as any;
+      if (anyApp.setting) {
+        anyApp.setting.open();
+        if (typeof anyApp.setting.openTabById === "function") {
+          anyApp.setting.openTabById("quick-calculator");
+        }
         return;
       }
     } catch { /* fall through */ }
-    new Notice("Open Settings → Community plugins → Quick Calculator → ⚙️");
+    new Notice("Settings → Community plugins → Quick Calculator");
   }
 
   private copyLatex_(): void {
@@ -1073,15 +1076,14 @@ class QuickCalculatorView extends ItemView {
     this.modal = new CalculatorModal(this.app);
     this.modal.settings = this.settings;
     this.modal.onOpen = () => {
-      const el = this.containerEl.children[1] as HTMLElement;
+      // Find the actual content container (bypass any Obsidian wrappers)
+      const el = (this.containerEl.querySelector(".view-content") as HTMLElement)
+        || (this.containerEl.children[1] as HTMLElement);
       el.empty();
       el.addClass("qc-panel");
       el.setAttr("tabindex", "0");
-      // Strip Obsidian's internal width constraints
-      el.style.maxWidth = "none";
-      el.style.width = "100%";
-      el.style.padding = "0";
-      el.style.margin = "0";
+      // Aggressively strip any inherited width constraints
+      el.style.cssText = "max-width:none!important;width:100%!important;padding:0!important;margin:0!important;overflow:hidden";
       this.modal.buildPanel_(el, () => {}, false);
     };
     this.modal.onOpen();
