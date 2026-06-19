@@ -394,20 +394,12 @@ class CalculatorModal extends Modal {
     this.latexEl = contentEl.createDiv("qc-latex-preview");
     this.renderLatexPreview_();
 
-    // ── Grid container (rebuilt by buildGrid_) ──
-    this.gridContainer = contentEl.createDiv("qc-grid-container");
-    this.buildGrid_();
-
-    // ── Memory bar ──
-    this.memoryBar = contentEl.createDiv("qc-memory-bar");
-    this.buildMemoryBar_();
-
-    // ── Mobile text input (hidden on desktop via CSS) ──
+    // ── Mobile text input (above grid — stays visible when keyboard opens) ──
     this.mobileInputEl = contentEl.createEl("input", {
       cls: "qc-mobile-input",
       attr: {
         type: "text",
-        inputmode: "text",          // show keyboard for typing
+        inputmode: "text",
         autocomplete: "off",
         autocorrect: "off",
         autocapitalize: "off",
@@ -417,7 +409,6 @@ class CalculatorModal extends Modal {
     }) as HTMLInputElement;
     this.mobileInputEl.addEventListener("input", () => {
       this.expression = this.mobileInputEl.value;
-      // Sync display
       if (this.expression) {
         this.display.setText(this.expression);
         this.renderLatexPreview_();
@@ -431,11 +422,30 @@ class CalculatorModal extends Modal {
         e.preventDefault();
         this.evaluate();
         this.mobileInputEl.value = "";
-        this.mobileInputEl.blur(); // dismiss keyboard on mobile
+        this.mobileInputEl.blur();
       } else if (e.key === "Escape") {
         this.close();
       }
     });
+    // Keep input visible above the keyboard on mobile
+    this.mobileInputEl.addEventListener("focus", () => {
+      setTimeout(() => {
+        this.mobileInputEl.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      }, 350);
+    });
+    this.mobileInputEl.addEventListener("blur", () => {
+      if (Platform.isMobile) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+
+    // ── Grid container (rebuilt by buildGrid_) ──
+    this.gridContainer = contentEl.createDiv("qc-grid-container");
+    this.buildGrid_();
+
+    // ── Memory bar ──
+    this.memoryBar = contentEl.createDiv("qc-memory-bar");
+    this.buildMemoryBar_();
 
     // Keyboard (desktop) — only auto-focus on non-mobile to avoid keyboard overlay
     this.contentEl.addEventListener("keydown", (e) => this.onKey_(e));

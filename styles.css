@@ -381,12 +381,12 @@
   box-sizing: border-box;
   border: none;
   outline: none;
-  background: var(--background-primary-alt);
+  background: var(--background-secondary);
   color: var(--text-normal);
   font-family: "SF Mono", "Fira Code", "Menlo", monospace;
   font-size: 0.85em;
-  padding: 8px 16px;
-  border-top: 1px solid var(--background-modifier-border);
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--background-modifier-border);
 }
 
 .qc-mobile-input::placeholder {
