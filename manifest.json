@@ -1,7 +1,7 @@
 {
   "id": "quick-calculator",
   "name": "Quick Calculator",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "minAppVersion": "0.15.0",
   "description": "Open a quick calculator — launches your system calculator on desktop or a built-in scientific calculator modal everywhere.",
   "author": "Hermes",
