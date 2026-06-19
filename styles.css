@@ -146,8 +146,8 @@
 
 .qc-header-btn {
   cursor: pointer;
-  font-size: 1em;
-  padding: 4px 8px;
+  font-size: 1.2em;
+  padding: 5px 9px;
   border-radius: 6px;
   opacity: 0.5;
   transition: opacity 0.15s, background 0.15s;

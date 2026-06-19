@@ -716,8 +716,14 @@ class CalculatorModal extends Modal {
 
   /** Open the Quick Calculator settings tab. */
   private openSettings_(): void {
-    // @ts-ignore — openTabById exists on the settings API
-    (this.app as any).setting?.openTabById?.("quick-calculator");
+    try {
+      const app = this.app as any;
+      if (app.setting && typeof app.setting.openTabById === "function") {
+        app.setting.openTabById("quick-calculator");
+        return;
+      }
+    } catch { /* fall through */ }
+    new Notice("Open Settings → Community plugins → Quick Calculator → ⚙️");
   }
 
   private copyLatex_(): void {
@@ -1066,15 +1072,17 @@ class QuickCalculatorView extends ItemView {
   async onOpen() {
     this.modal = new CalculatorModal(this.app);
     this.modal.settings = this.settings;
-    // Monkey-patch: render into our container, not a modal overlay
     this.modal.onOpen = () => {
       const el = this.containerEl.children[1] as HTMLElement;
       el.empty();
       el.addClass("qc-panel");
       el.setAttr("tabindex", "0");
-      this.modal.buildPanel_(el, () => {
-        // Panel close — optionally clear the display
-      }, false);
+      // Strip Obsidian's internal width constraints
+      el.style.maxWidth = "none";
+      el.style.width = "100%";
+      el.style.padding = "0";
+      el.style.margin = "0";
+      this.modal.buildPanel_(el, () => {}, false);
     };
     this.modal.onOpen();
   }
