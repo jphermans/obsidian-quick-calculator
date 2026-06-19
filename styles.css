@@ -9,6 +9,59 @@
   overflow: hidden;
 }
 
+/* ─── Calculator Panel (docked sidebar) ─────────────────────────── */
+
+.qc-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--background-primary);
+}
+
+.qc-panel .qc-header {
+  padding: 8px 12px 6px;
+  flex-shrink: 0;
+}
+
+.qc-panel .qc-display {
+  font-size: 1.8em;
+  padding: 14px 16px;
+  min-height: 56px;
+  flex-shrink: 0;
+}
+
+.qc-panel .qc-latex-preview {
+  flex-shrink: 0;
+}
+
+.qc-panel .qc-grid-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.qc-panel .qc-grid {
+  width: 100%;
+}
+
+.qc-panel .qc-memory-bar {
+  flex-shrink: 0;
+}
+
+.qc-panel .qc-btn {
+  padding: 14px 0;
+  font-size: 1.2em;
+}
+
+.qc-panel .qc-btn.qc-sci-fn {
+  font-size: 0.82em;
+  padding: 12px 0;
+}
+
 /* ─── Header ──────────────────────────────────────────────────── */
 
 .qc-header {

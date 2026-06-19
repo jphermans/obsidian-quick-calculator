@@ -1,5 +1,6 @@
 import {
   App,
+  ItemView,
   MarkdownView,
   Modal,
   Notice,
@@ -7,12 +8,13 @@ import {
   PluginSettingTab,
   Setting,
   Platform,
+  WorkspaceLeaf,
 } from "obsidian";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
 interface QuickCalculatorSettings {
-  ribbonAction: "system" | "modal";
+  ribbonAction: "system" | "modal" | "panel";
   insertTemplate: string;
 }
 
@@ -344,13 +346,18 @@ class CalculatorModal extends Modal {
   onOpen() {
     const { contentEl } = this;
     contentEl.addClass("qc-modal");
-    contentEl.setAttr("tabindex", "0");
+    this.buildPanel_(contentEl, () => this.close(), true);
+  }
+
+  /** Build the calculator UI into a container element. Used by both modal and panel view. */
+  buildPanel_(container: HTMLElement, onClose: () => void, showCloseBtn: boolean): void {
+    container.setAttr("tabindex", "0");
 
     // Restore memory from localStorage
     this.loadMemory_();
 
     // ── Header ──
-    const header = contentEl.createDiv("qc-header");
+    const header = container.createDiv("qc-header");
 
     const leftGroup = header.createDiv("qc-header-left");
     // Mode toggle
@@ -382,21 +389,23 @@ class CalculatorModal extends Modal {
     histBtn.setAttr("aria-label", "History");
     histBtn.addEventListener("click", () => this.showHistory_());
 
-    const closeBtn = rightGroup.createSpan("qc-header-btn");
-    closeBtn.setText("✕");
-    closeBtn.setAttr("aria-label", "Close");
-    closeBtn.addEventListener("click", () => this.close());
+    if (showCloseBtn) {
+      const closeBtn = rightGroup.createSpan("qc-header-btn");
+      closeBtn.setText("✕");
+      closeBtn.setAttr("aria-label", "Close");
+      closeBtn.addEventListener("click", onClose);
+    }
 
     // ── Display ──
-    this.display = contentEl.createDiv("qc-display");
+    this.display = container.createDiv("qc-display");
     this.renderDisplay_();
 
     // ── LaTeX preview ──
-    this.latexEl = contentEl.createDiv("qc-latex-preview");
+    this.latexEl = container.createDiv("qc-latex-preview");
     this.renderLatexPreview_();
 
-    // ── Mobile text input (above grid — stays visible when keyboard opens) ──
-    this.mobileInputEl = contentEl.createEl("input", {
+    // ── Mobile text input (above grid) ──
+    this.mobileInputEl = container.createEl("input", {
       cls: "qc-mobile-input",
       attr: {
         type: "text",
@@ -425,10 +434,9 @@ class CalculatorModal extends Modal {
         this.mobileInputEl.value = "";
         this.mobileInputEl.blur();
       } else if (e.key === "Escape") {
-        this.close();
+        onClose();
       }
     });
-    // Keep input visible above the keyboard on mobile
     this.mobileInputEl.addEventListener("focus", () => {
       setTimeout(() => {
         this.mobileInputEl.scrollIntoView({ block: "nearest", behavior: "smooth" });
@@ -440,18 +448,18 @@ class CalculatorModal extends Modal {
       }
     });
 
-    // ── Grid container (rebuilt by buildGrid_) ──
-    this.gridContainer = contentEl.createDiv("qc-grid-container");
+    // ── Grid ──
+    this.gridContainer = container.createDiv("qc-grid-container");
     this.buildGrid_();
 
     // ── Memory bar ──
-    this.memoryBar = contentEl.createDiv("qc-memory-bar");
+    this.memoryBar = container.createDiv("qc-memory-bar");
     this.buildMemoryBar_();
 
-    // Keyboard (desktop) — only auto-focus on non-mobile to avoid keyboard overlay
-    this.contentEl.addEventListener("keydown", (e) => this.onKey_(e));
+    // Keyboard
+    container.addEventListener("keydown", (e) => this.onKey_(e));
     if (!Platform.isMobile) {
-      requestAnimationFrame(() => this.contentEl.focus());
+      requestAnimationFrame(() => container.focus());
     }
   }
 
@@ -959,6 +967,43 @@ class CalculatorModal extends Modal {
   }
 }
 
+// ─── Calculator Panel View (dockable, persistent) ──────────────────────────
+
+const CALCULATOR_VIEW_TYPE = "quick-calculator-panel";
+
+class QuickCalculatorView extends ItemView {
+  private modal!: CalculatorModal;
+  settings: QuickCalculatorSettings = DEFAULT_SETTINGS;
+
+  constructor(leaf: WorkspaceLeaf) {
+    super(leaf);
+  }
+
+  getViewType(): string { return CALCULATOR_VIEW_TYPE; }
+  getDisplayText(): string { return "Quick Calculator"; }
+  getIcon(): string { return "calculator"; }
+
+  async onOpen() {
+    this.modal = new CalculatorModal(this.app);
+    this.modal.settings = this.settings;
+    // Monkey-patch: render into our container, not a modal overlay
+    this.modal.onOpen = () => {
+      const el = this.containerEl.children[1] as HTMLElement;
+      el.empty();
+      el.addClass("qc-panel");
+      el.setAttr("tabindex", "0");
+      this.modal.buildPanel_(el, () => {
+        // Panel close — optionally clear the display
+      }, false);
+    };
+    this.modal.onOpen();
+  }
+
+  async onClose() {
+    this.modal.onClose();
+  }
+}
+
 // ─── Plugin ──────────────────────────────────────────────────────────────────
 
 export default class QuickCalculatorPlugin extends Plugin {
@@ -967,10 +1012,26 @@ export default class QuickCalculatorPlugin extends Plugin {
   async onload() {
     await this.loadSettings();
 
-    // In-app calculator — always available
+    // ── Dockable panel view (desktop) ──
+    this.registerView(
+      CALCULATOR_VIEW_TYPE,
+      (leaf) => {
+        const view = new QuickCalculatorView(leaf);
+        view.settings = this.settings;
+        return view;
+      }
+    );
+
+    this.addCommand({
+      id: "open-calculator-panel",
+      name: "Open calculator panel",
+      callback: () => this.activateView_(),
+    });
+
+    // In-app calculator modal — always available
     this.addCommand({
       id: "open-modal-calculator",
-      name: "Open quick calculator",
+      name: "Open quick calculator (modal)",
       callback: () => this.createModal_().open(),
     });
 
@@ -985,7 +1046,9 @@ export default class QuickCalculatorPlugin extends Plugin {
 
     // Ribbon icon
     this.addRibbonIcon("calculator", "Quick Calculator", () => {
-      if (this.settings.ribbonAction === "modal" || Platform.isMobile) {
+      if (Platform.isDesktop && this.settings.ribbonAction === "panel") {
+        this.activateView_();
+      } else if (this.settings.ribbonAction === "modal" || Platform.isMobile) {
         this.createModal_().open();
       } else {
         this.openSystemCalculator();
@@ -995,7 +1058,9 @@ export default class QuickCalculatorPlugin extends Plugin {
     this.addSettingTab(new QuickCalculatorSettingTab(this.app, this));
   }
 
-  onunload() {}
+  onunload() {
+    this.app.workspace.detachLeavesOfType(CALCULATOR_VIEW_TYPE);
+  }
 
   async loadSettings() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
@@ -1009,6 +1074,24 @@ export default class QuickCalculatorPlugin extends Plugin {
     const modal = new CalculatorModal(this.app);
     modal.settings = this.settings;
     return modal;
+  }
+
+  private async activateView_(): Promise<void> {
+    const { workspace } = this.app;
+
+    // Reveal existing leaf if already open
+    const existing = workspace.getLeavesOfType(CALCULATOR_VIEW_TYPE);
+    if (existing.length > 0) {
+      workspace.revealLeaf(existing[0]);
+      return;
+    }
+
+    // Open in right sidebar
+    const leaf = workspace.getRightLeaf(false);
+    if (leaf) {
+      await leaf.setViewState({ type: CALCULATOR_VIEW_TYPE, active: true });
+      workspace.revealLeaf(leaf);
+    }
   }
 
   private openSystemCalculator(): void {
@@ -1071,10 +1154,11 @@ class QuickCalculatorSettingTab extends PluginSettingTab {
       .addDropdown((dropdown) =>
         dropdown
           .addOption("system", "Open system calculator")
-          .addOption("modal", "Open in-app calculator")
+          .addOption("modal", "Open in-app modal")
+          .addOption("panel", "Open side panel")
           .setValue(this.plugin.settings.ribbonAction)
           .onChange(async (value) => {
-            this.plugin.settings.ribbonAction = value as "system" | "modal";
+            this.plugin.settings.ribbonAction = value as "system" | "modal" | "panel";
             await this.plugin.saveSettings();
           })
       );
