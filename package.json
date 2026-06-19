@@ -1,6 +1,6 @@
 {
   "name": "quick-calculator",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Obsidian plugin: quick calculator that opens system calc on desktop or a built-in modal on mobile.",
   "main": "main.js",
   "scripts": {

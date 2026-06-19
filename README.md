@@ -1,6 +1,6 @@
 <!-- markdownlint-disable MD033 MD041 -->
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.2.0-blue?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/badge/version-1.2.1-blue?style=flat-square" alt="Version">
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License">
   <img src="https://img.shields.io/badge/obsidian-%3E%3D0.15.0-7c3aed?style=flat-square&logo=obsidian" alt="Obsidian">
   <img src="https://img.shields.io/badge/platform-desktop%20%7C%20mobile-lightgrey?style=flat-square" alt="Platform">

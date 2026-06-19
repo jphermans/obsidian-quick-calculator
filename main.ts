@@ -69,7 +69,7 @@ class ExpressionParser {
     return left;
   }
 
-  // ── term → factor (('*' | '/' | '%') factor)* ──
+  // ── term → factor (('*' | '/') factor)* ──
 
   private term_(): number {
     let left = this.unary_();
@@ -82,7 +82,6 @@ class ExpressionParser {
         if (divisor === 0) throw new Error("Division by zero");
         left /= divisor;
       }
-      else if (ch === "%") { this.pos++; left %= this.unary_(); }
       else break;
     }
     return left;
@@ -151,6 +150,13 @@ class ExpressionParser {
         throw new Error("Factorial only defined for non-negative integers");
       }
       val = this.factorial_(val);
+    }
+
+    // Postfix percentage: val% means val/100
+    while (this.pos < this.expr.length && this.expr[this.pos] === "%") {
+      this.pos++;
+      if (val === 0) continue;
+      val = val / 100;
     }
 
     return val;
