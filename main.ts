@@ -389,6 +389,12 @@ class CalculatorModal extends Modal {
     latexBtn.setAttr("aria-label", "Copy LaTeX");
     latexBtn.addEventListener("click", () => this.copyLatex_());
 
+    // Settings button
+    const settingsBtn = rightGroup.createSpan("qc-header-btn");
+    settingsBtn.setText("⚙️");
+    settingsBtn.setAttr("aria-label", "Settings");
+    settingsBtn.addEventListener("click", () => this.openSettings_());
+
     // History button
     const histBtn = rightGroup.createSpan("qc-header-btn");
     histBtn.setText("⏱");
@@ -707,6 +713,12 @@ class CalculatorModal extends Modal {
   }
 
   // ─── Copy LaTeX ───────────────────────────────────────────
+
+  /** Open the Quick Calculator settings tab. */
+  private openSettings_(): void {
+    // @ts-ignore — openTabById exists on the settings API
+    (this.app as any).setting?.openTabById?.("quick-calculator");
+  }
 
   private copyLatex_(): void {
     const expr = this.expression || this.lastExpression;
@@ -1223,7 +1235,7 @@ class QuickCalculatorSettingTab extends PluginSettingTab {
 
     // ── Credentials ──
     const creds = containerEl.createDiv("qc-settings-creds");
-    creds.createEl("span", { text: "v1.2.3", cls: "qc-settings-badge" });
+    creds.createEl("span", { text: "v1.2.4", cls: "qc-settings-badge" });
     creds.createEl("span", { text: "JPHsystems", cls: "qc-settings-badge" });
     creds.createEl("span", { text: "MIT", cls: "qc-settings-badge" });
 
@@ -1300,7 +1312,7 @@ class QuickCalculatorSettingTab extends PluginSettingTab {
     // ── Footer ──
     const footer = containerEl.createDiv("qc-settings-footer");
     footer.createEl("p", {
-      text: "Quick Calculator v1.2.3 · © 2026 JPHsystems · MIT License",
+      text: "Quick Calculator v1.2.4 · © 2026 JPHsystems · MIT License",
       cls: "setting-item-description",
     });
     footer.createEl("p", {
