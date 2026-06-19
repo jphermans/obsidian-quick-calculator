@@ -783,11 +783,73 @@ class CalculatorModal extends Modal {
     }
   }
 
+  // ─── Percentage expansion ─────────────────────────────────
+
+  /** Expand calculator-style percentages (e.g. 100+21% → 100+100*21/100).
+   *  Only expands when % is at the end of the expression (or followed by non-digit).
+   *  10%3 stays as modulo. */
+  private expandPercentages_(expr: string): string {
+    // No % → nothing to do
+    const pctIdx = expr.lastIndexOf("%");
+    if (pctIdx === -1) return expr;
+
+    // If % is followed by a digit, it's modulo — don't touch
+    if (pctIdx + 1 < expr.length && /[\d.]/.test(expr[pctIdx + 1])) return expr;
+
+    // After the %, there may only be ) or whitespace
+    const afterPct = expr.slice(pctIdx + 1);
+    if (afterPct && !/^[)\s]*$/.test(afterPct)) return expr;
+
+    // Find the number before the %
+    let i = pctIdx - 1;
+    while (i >= 0 && /[\d.]/.test(expr[i])) i--;
+    const pctNum = expr.slice(i + 1, pctIdx);
+    if (!pctNum) return expr;
+
+    // Case: standalone number% → number/100
+    if (i < 0) {
+      return expr.slice(0, pctIdx) + "/100" + afterPct;
+    }
+
+    // Find operator before that number
+    let j = i;
+    while (j >= 0 && /\s/.test(expr[j])) j--;
+    if (j < 0) {
+      return expr.slice(0, pctIdx) + "/100" + afterPct;
+    }
+    const op = expr[j];
+    if (!"+-*/".includes(op)) {
+      return expr.slice(0, pctIdx) + "/100" + afterPct;
+    }
+
+    // Find base number before the operator
+    let k = j - 1;
+    while (k >= 0 && /[\d.]/.test(expr[k])) k--;
+    const baseNum = expr.slice(k + 1, j);
+    if (!baseNum) {
+      return expr.slice(0, pctIdx) + "/100" + afterPct;
+    }
+
+    const before = expr.slice(0, k + 1);
+
+    if (op === "+" || op === "-") {
+      // X+Y% → X + X*Y/100
+      return before + baseNum + op + baseNum + "*" + pctNum + "/100" + afterPct;
+    } else if (op === "*") {
+      // X*Y% → X*Y/100
+      return before + baseNum + "*" + pctNum + "/100" + afterPct;
+    } else {
+      // X/Y% → X/Y*100
+      return before + baseNum + "/" + pctNum + "*100" + afterPct;
+    }
+  }
+
   private evaluate(): void {
     if (this.expression === "") return;
     const expr = this.expression;
     try {
-      const result = this.parser.evaluate(expr, this.angleMode);
+      const expanded = this.expandPercentages_(expr);
+      const result = this.parser.evaluate(expanded, this.angleMode);
       const rounded = parseFloat(result.toPrecision(12));
       const resultStr = String(rounded);
       this.lastExpression = expr;
