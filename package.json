@@ -1,0 +1,16 @@
+{
+  "name": "quick-calculator",
+  "version": "1.1.0",
+  "description": "Obsidian plugin: quick calculator that opens system calc on desktop or a built-in modal on mobile.",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "esbuild": "^0.19.0",
+    "obsidian": "^1.4.0",
+    "typescript": "^5.3.0"
+  }
+}

@@ -1,0 +1,477 @@
+/* ─── Calculator Modal ───────────────────────────────────────────── */
+
+.qc-modal {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  max-width: 340px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* ─── Header ──────────────────────────────────────────────────── */
+
+.qc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 6px;
+  user-select: none;
+  gap: 8px;
+}
+
+.qc-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qc-header-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.qc-mode-toggle {
+  font-size: 0.78em;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--background-modifier-hover);
+  transition: background 0.15s;
+}
+
+.qc-mode-toggle:hover {
+  background: var(--background-modifier-border);
+}
+
+.qc-angle-toggle {
+  font-size: 0.72em;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 3px 7px;
+  border-radius: 6px;
+  color: var(--text-accent);
+  background: var(--background-modifier-hover);
+  transition: background 0.15s;
+}
+
+.qc-angle-toggle:hover {
+  background: var(--background-modifier-border);
+}
+
+.qc-header-btn {
+  cursor: pointer;
+  font-size: 1em;
+  padding: 4px 8px;
+  border-radius: 6px;
+  opacity: 0.5;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.qc-header-btn:hover {
+  opacity: 1;
+  background: var(--background-modifier-hover);
+}
+
+/* ─── Display ─────────────────────────────────────────────────── */
+
+.qc-display {
+  font-family: "SF Mono", "Fira Code", "Menlo", "Consolas", monospace;
+  font-size: 2.2em;
+  font-weight: 300;
+  text-align: right;
+  padding: 16px 20px;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  overflow-x: auto;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  background: var(--background-primary-alt);
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.theme-dark .qc-display {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* ─── LaTeX Preview ──────────────────────────────────────────── */
+
+.qc-latex-preview {
+  font-family: "Latin Modern Math", "STIX Two Math", "Cambria Math", "SF Mono", "Fira Code", monospace;
+  font-size: 0.78em;
+  text-align: right;
+  padding: 6px 20px 8px;
+  color: var(--text-muted);
+  background: var(--background-primary-alt);
+  border-bottom: 1px solid var(--background-modifier-border);
+  min-height: 20px;
+  user-select: all;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+.theme-dark .qc-latex-preview {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* ─── Grid Container ──────────────────────────────────────────── */
+
+.qc-grid-container {
+  flex-shrink: 0;
+}
+
+/* ─── Basic Grid (4 columns) ──────────────────────────────────── */
+
+.qc-grid-basic {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  padding: 1px;
+  background: var(--background-modifier-border);
+}
+
+/* ─── Scientific Grid (5 columns) ─────────────────────────────── */
+
+.qc-grid-sci {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  padding: 1px;
+  background: var(--background-modifier-border);
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────── */
+
+.qc-btn {
+  border: none;
+  border-radius: 0;
+  padding: 16px 0;
+  font-size: 1.2em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  cursor: pointer;
+  transition: background 0.1s, filter 0.1s;
+  user-select: none;
+  outline: none;
+  background: var(--background-primary);
+  color: var(--text-normal);
+}
+
+.qc-btn:active {
+  filter: brightness(0.85);
+}
+
+/* Number buttons */
+.qc-btn.qc-num {
+  font-weight: 400;
+  background: var(--background-secondary);
+}
+
+.qc-btn.qc-num:hover {
+  background: var(--background-modifier-hover);
+}
+
+.theme-dark .qc-btn.qc-num {
+  background: var(--background-primary);
+}
+
+.theme-dark .qc-btn.qc-num:hover {
+  background: var(--background-modifier-hover);
+}
+
+/* Function buttons (C, ⌫, ±) */
+.qc-btn.qc-fn {
+  font-weight: 500;
+  color: var(--text-accent);
+  background: var(--background-primary);
+}
+
+.qc-btn.qc-fn:hover {
+  background: var(--background-modifier-hover);
+}
+
+/* Operator buttons (÷ × − + %) */
+.qc-btn.qc-op {
+  font-weight: 600;
+  font-size: 1.3em;
+  color: var(--text-accent);
+  background: var(--background-primary);
+}
+
+.qc-btn.qc-op:hover {
+  background: var(--background-modifier-hover);
+}
+
+/* Scientific function buttons (sin, cos, tan, etc.) */
+.qc-btn.qc-sci-fn {
+  font-weight: 500;
+  font-size: 0.82em;
+  color: var(--text-muted);
+  background: var(--background-primary);
+  padding: 14px 0;
+}
+
+.qc-btn.qc-sci-fn:hover {
+  color: var(--text-accent);
+  background: var(--background-modifier-hover);
+}
+
+/* Scientific constant buttons (π, e) */
+.qc-btn.qc-sci-const {
+  font-weight: 600;
+  font-size: 1em;
+  color: var(--text-accent-hover);
+  background: var(--background-secondary);
+  font-style: italic;
+}
+
+.qc-btn.qc-sci-const:hover {
+  background: var(--background-modifier-hover);
+}
+
+/* Equals button */
+.qc-btn.qc-eq {
+  font-weight: 700;
+  font-size: 1.35em;
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+.qc-btn.qc-eq:hover {
+  background: var(--interactive-accent-hover);
+}
+
+/* ─── Memory Bar ──────────────────────────────────────────────── */
+
+.qc-memory-bar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 8px;
+  background: var(--background-secondary);
+  border-top: 1px solid var(--background-modifier-border);
+  min-height: 34px;
+}
+
+.qc-mem-btn {
+  border: none;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 0.72em;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-muted);
+  transition: color 0.15s, background 0.15s;
+}
+
+.qc-mem-btn:hover {
+  color: var(--text-accent);
+  background: var(--background-modifier-hover);
+}
+
+.qc-memory-value {
+  margin-left: auto;
+  font-size: 0.72em;
+  font-weight: 500;
+  color: var(--text-accent);
+  font-family: "SF Mono", "Fira Code", monospace;
+}
+
+/* ─── History Overlay ─────────────────────────────────────────── */
+
+.qc-history-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qc-history-panel {
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 12px;
+  padding: 16px;
+  max-width: 360px;
+  width: 90vw;
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.qc-history-title {
+  font-weight: 700;
+  font-size: 0.95em;
+  margin-bottom: 10px;
+  color: var(--text-muted);
+}
+
+.qc-history-list {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.qc-history-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.12s;
+  font-family: "SF Mono", "Fira Code", "Menlo", monospace;
+  font-size: 0.85em;
+}
+
+.qc-history-row:hover {
+  background: var(--background-modifier-hover);
+}
+
+.qc-history-expr {
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.qc-history-eq {
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+
+.qc-history-res {
+  color: var(--text-accent);
+  font-weight: 600;
+  flex-shrink: 0;
+  text-align: right;
+  min-width: 60px;
+}
+
+.qc-history-footer {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--background-modifier-border);
+  text-align: center;
+}
+
+.qc-history-clear {
+  font-size: 0.78em;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.qc-history-clear:hover {
+  color: var(--text-error);
+}
+
+/* ─── Mobile Text Input ───────────────────────────────────────── */
+
+.qc-mobile-input {
+  display: none; /* hidden on desktop, shown via media query */
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  background: var(--background-primary-alt);
+  color: var(--text-normal);
+  font-family: "SF Mono", "Fira Code", "Menlo", monospace;
+  font-size: 0.85em;
+  padding: 8px 16px;
+  border-top: 1px solid var(--background-modifier-border);
+}
+
+.qc-mobile-input::placeholder {
+  color: var(--text-faint);
+}
+
+/* ─── Mobile responsive ───────────────────────────────────────── */
+
+/* Stack header items and enlarge touch targets on small screens */
+@media screen and (max-width: 480px) {
+  .qc-modal {
+    max-width: 100vw;
+    border-radius: 0;
+  }
+
+  .qc-header {
+    padding: 10px 12px 6px;
+  }
+
+  .qc-header-btn {
+    padding: 6px 10px;
+    font-size: 1.15em;
+  }
+
+  .qc-mode-toggle,
+  .qc-angle-toggle {
+    padding: 5px 10px;
+    font-size: 0.82em;
+  }
+
+  .qc-display {
+    padding: 14px 16px;
+    min-height: 60px;
+    font-size: 1.8em;
+  }
+
+  .qc-latex-preview {
+    padding: 4px 16px 6px;
+    font-size: 0.72em;
+  }
+
+  /* Larger tap targets */
+  .qc-btn {
+    padding: 20px 0;
+    font-size: 1.15em;
+    min-height: 48px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .qc-btn.qc-sci-fn {
+    font-size: 0.78em;
+    padding: 16px 0;
+    min-height: 44px;
+  }
+
+  .qc-btn.qc-eq {
+    font-size: 1.3em;
+  }
+
+  .qc-mem-btn {
+    padding: 5px 10px;
+    font-size: 0.76em;
+    min-height: 36px;
+  }
+
+  /* Show mobile text input */
+  .qc-mobile-input {
+    display: block;
+  }
+
+  /* Full-width history panel */
+  .qc-history-panel {
+    max-width: 95vw;
+    max-height: 70vh;
+  }
+
+  .qc-history-row {
+    padding: 10px 12px;
+    font-size: 0.9em;
+  }
+}
+
+/* Prevent text selection flash on mobile tap */
+.qc-btn,
+.qc-mem-btn {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+}
