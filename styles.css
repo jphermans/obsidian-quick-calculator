@@ -528,3 +528,109 @@
   -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
 }
+
+/* ─── Settings page ──────────────────────────────────────────── */
+
+.qc-settings-banner {
+  text-align: center;
+  padding: 24px 16px 16px;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--interactive-accent), #6d28d9);
+  border-radius: 12px;
+  color: #fff;
+}
+
+.qc-settings-banner h1 {
+  font-size: 1.6em;
+  font-weight: 700;
+  margin: 0 0 6px;
+  color: #fff;
+}
+
+.qc-settings-subtitle {
+  font-size: 0.9em;
+  opacity: 0.85;
+  margin: 0;
+}
+
+/* Credential badges */
+.qc-settings-creds {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.qc-settings-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  font-size: 0.72em;
+  font-weight: 600;
+  border-radius: 10px;
+  background: var(--background-modifier-hover);
+  color: var(--text-muted);
+}
+
+/* Doc rows */
+.qc-settings-docs {
+  margin-bottom: 20px;
+  padding: 12px;
+  background: var(--background-secondary);
+  border-radius: 8px;
+}
+
+.qc-settings-docs h3 {
+  margin: 0 0 10px;
+}
+
+.qc-settings-doc-row {
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.qc-settings-doc-row:last-child {
+  border-bottom: none;
+}
+
+.qc-settings-doc-icon {
+  font-size: 1.2em;
+  flex-shrink: 0;
+  width: 28px;
+  text-align: center;
+}
+
+.qc-settings-doc-body {
+  flex: 1;
+}
+
+.qc-settings-doc-body strong {
+  font-size: 0.88em;
+}
+
+.qc-settings-doc-body p {
+  margin: 2px 0 0;
+  font-size: 0.8em;
+}
+
+/* Command reference */
+.qc-settings-cmd {
+  padding: 4px 0;
+}
+
+.qc-settings-cmd code {
+  font-size: 0.82em;
+}
+
+/* Footer */
+.qc-settings-footer {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--background-modifier-border);
+  text-align: center;
+}
+
+.qc-settings-footer p {
+  margin: 2px 0;
+}

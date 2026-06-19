@@ -1212,12 +1212,50 @@ class QuickCalculatorSettingTab extends PluginSettingTab {
   display(): void {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl("h2", { text: "Quick Calculator" });
+
+    // ── Banner ──
+    const banner = containerEl.createDiv("qc-settings-banner");
+    banner.createEl("h1", { text: "🧮 Quick Calculator" });
+    banner.createEl("p", {
+      text: "Instant calculations from anywhere in Obsidian — desktop & mobile.",
+      cls: "qc-settings-subtitle",
+    });
+
+    // ── Credentials ──
+    const creds = containerEl.createDiv("qc-settings-creds");
+    creds.createEl("span", { text: "v1.2.2", cls: "qc-settings-badge" });
+    creds.createEl("span", { text: "JPHsystems", cls: "qc-settings-badge" });
+    creds.createEl("span", { text: "MIT", cls: "qc-settings-badge" });
+
+    // ── How it works ──
+    const docs = containerEl.createDiv("qc-settings-docs");
+    docs.createEl("h3", { text: "📖 How it works" });
+
+    const items = [
+      { icon: "🖥️", title: "System launcher", desc: "Opens your OS calculator — macOS Calculator.app, Windows calc.exe, or Linux equivalent." },
+      { icon: "📌", title: "Side panel", desc: "Docks a persistent calculator in Obsidian's right sidebar. Resize it, switch notes — it stays open." },
+      { icon: "💬", title: "Floating modal", desc: "Quick popup calculator that works everywhere, including mobile (iOS/Android)." },
+      { icon: "🔬", title: "Scientific", desc: "Toggle Basic/Scientific with the mode button or Cmd/Ctrl+M. Trig, log, sqrt, pi, e, factorial, and more." },
+      { icon: "💯", title: "Percentage", desc: "Real calculator logic: 100+21% = 121, 100−21% = 79, 50×10% = 5." },
+      { icon: "📝", title: "Insert", desc: "Writes expression = result into your active note AND copies to clipboard in one tap." },
+      { icon: "📋", title: "LaTeX", desc: "Copies MathJax-ready formulas. Live preview shows the LaTeX as you type." },
+    ];
+
+    for (const item of items) {
+      const row = docs.createDiv("qc-settings-doc-row");
+      row.createSpan("qc-settings-doc-icon").setText(item.icon);
+      const body = row.createDiv("qc-settings-doc-body");
+      body.createEl("strong", { text: item.title });
+      body.createEl("p", { text: item.desc, cls: "setting-item-description" });
+    }
+
+    // ── Settings ──
+    containerEl.createEl("h3", { text: "⚙️ Settings" });
 
     new Setting(containerEl)
       .setName("Ribbon icon action")
       .setDesc(
-        "What happens when you click the calculator ribbon icon? On mobile the in-app calculator is always used."
+        "What happens when you click the calculator ribbon icon? On mobile the in-app modal is always used."
       )
       .addDropdown((dropdown) =>
         dropdown
@@ -1246,9 +1284,28 @@ class QuickCalculatorSettingTab extends PluginSettingTab {
           })
       );
 
-    containerEl.createEl("p", {
+    // ── Commands reference ──
+    containerEl.createEl("h3", { text: "⌨️ Commands" });
+    const cmds = [
+      ["Open calculator panel", "Dock calculator in right sidebar"],
+      ["Open quick calculator (modal)", "Floating popup (all platforms)"],
+      ["Open system calculator", "Your OS calculator (desktop only)"],
+    ];
+    for (const [name, desc] of cmds) {
+      const row = containerEl.createDiv("qc-settings-cmd");
+      row.createEl("code", { text: name });
+      row.createSpan("setting-item-description").setText(" — " + desc);
+    }
+
+    // ── Footer ──
+    const footer = containerEl.createDiv("qc-settings-footer");
+    footer.createEl("p", {
+      text: "Quick Calculator v1.2.2 · © 2026 JPHsystems · MIT License",
       cls: "setting-item-description",
-      text: "Tip: Click 📝 to insert the current expression into the active note. Click 📋 to copy the LaTeX formula. Use Cmd/Ctrl+M to toggle Basic/Scientific mode.",
+    });
+    footer.createEl("p", {
+      text: "github.com/jphermans/obsidian-quick-calculator",
+      cls: "setting-item-description",
     });
   }
 }

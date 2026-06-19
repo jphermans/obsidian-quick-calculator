@@ -1,6 +1,6 @@
 <!-- markdownlint-disable MD033 MD041 -->
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.2.1-blue?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/badge/version-1.2.2-blue?style=flat-square" alt="Version">
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License">
   <img src="https://img.shields.io/badge/obsidian-%3E%3D0.15.0-7c3aed?style=flat-square&logo=obsidian" alt="Obsidian">
   <img src="https://img.shields.io/badge/platform-desktop%20%7C%20mobile-lightgrey?style=flat-square" alt="Platform">
@@ -17,58 +17,21 @@
 ## ✨ Features
 
 <table>
-  <tr>
-    <td>🖥️ <strong>System launcher</strong></td>
-    <td>One-click to open macOS Calculator.app, Windows calc.exe, or your Linux calculator</td>
-  </tr>
-  <tr>
-    <td>📱 <strong>Built-in scientific</strong></td>
-    <td>Fully functional calculator modal — works on iOS, Android, and desktop</td>
-  </tr>
-  <tr>
-    <td>🔬 <strong>Scientific mode</strong></td>
-    <td>sin · cos · tan · log · ln · √ · x² · xʸ · π · e · n! · abs · floor · ceil · round</td>
-  </tr>
-  <tr>
-    <td>📐 <strong>DEG / RAD toggle</strong></td>
-    <td>Switch angle units for trigonometry — one tap</td>
-  </tr>
-  <tr>
-    <td>🔄 <strong>Basic &amp; Scientific</strong></td>
-    <td>Toggle modes with the button or <kbd>⌘/Ctrl+M</kbd></td>
-  </tr>
-  <tr>
-    <td>🧠 <strong>Memory</strong></td>
-    <td>MC · MR · M+ · M— — persists across Obsidian restarts</td>
-  </tr>
-  <tr>
-    <td>📜 <strong>History</strong></td>
-    <td>Last 20 calculations — tap any to reuse</td>
-  </tr>
-  <tr>
-    <td>📝 <strong>Insert into note</strong></td>
-    <td>Write the current expression = result into the active Markdown note</td>
-  </tr>
-  <tr>
-    <td>📋 <strong>Copy LaTeX</strong></td>
-    <td>Copy as MathJax-ready LaTeX — paste into any note for rendered math</td>
-  </tr>
-  <tr>
-    <td>👁️ <strong>Live LaTeX preview</strong></td>
-    <td>See the LaTeX equivalent as you type</td>
-  </tr>
-  <tr>
-    <td>⌨️ <strong>Full keyboard support</strong></td>
-    <td>Type expressions — no mouse needed</td>
-  </tr>
-  <tr>
-    <td>🌗 <strong>Theme-aware</strong></td>
-    <td>Respects Obsidian light and dark themes</td>
-  </tr>
-  <tr>
-    <td>🛡️ <strong>Safe parser</strong></td>
-    <td>Recursive-descent — no <code>eval()</code>, passes community plugin review</td>
-  </tr>
+  <tr><td>🖥️ <strong>System launcher</strong></td><td>One-click to open macOS Calculator.app, Windows calc.exe, or your Linux calculator</td></tr>
+  <tr><td>📱 <strong>Built-in scientific</strong></td><td>Fully functional calculator modal — works on iOS, Android, and desktop</td></tr>
+  <tr><td>📌 <strong>Dockable panel</strong></td><td>Persistent side panel on desktop — stays visible as you work</td></tr>
+  <tr><td>🔬 <strong>Scientific mode</strong></td><td>sin · cos · tan · log · ln · √ · x² · xʸ · π · e · n! · abs · floor · ceil · round</td></tr>
+  <tr><td>📐 <strong>DEG / RAD toggle</strong></td><td>Switch angle units for trigonometry — one tap</td></tr>
+  <tr><td>🔄 <strong>Basic &amp; Scientific</strong></td><td>Toggle modes with the button or <kbd>⌘/Ctrl+M</kbd></td></tr>
+  <tr><td>💯 <strong>Percentage</strong></td><td>100+21% = 121 — real calculator percentage logic</td></tr>
+  <tr><td>🧠 <strong>Memory</strong></td><td>MC · MR · M+ · M— — persists across Obsidian restarts</td></tr>
+  <tr><td>📜 <strong>History</strong></td><td>Last 20 calculations — tap any to reuse</td></tr>
+  <tr><td>📝 <strong>Insert into note</strong></td><td>Write expression = result into the active Markdown note + copies to clipboard</td></tr>
+  <tr><td>📋 <strong>Copy LaTeX</strong></td><td>Copy as MathJax-ready LaTeX — paste into any note for rendered math</td></tr>
+  <tr><td>👁️ <strong>Live LaTeX preview</strong></td><td>See the LaTeX equivalent as you type</td></tr>
+  <tr><td>⌨️ <strong>Full keyboard support</strong></td><td>Type expressions — no mouse needed</td></tr>
+  <tr><td>🌗 <strong>Theme-aware</strong></td><td>Respects Obsidian light and dark themes</td></tr>
+  <tr><td>🛡️ <strong>Safe parser</strong></td><td>Recursive-descent — no <code>eval()</code>, passes community plugin review</td></tr>
 </table>
 
 ---
@@ -79,8 +42,10 @@
 
 | Action | How |
 |--------|-----|
-| **Command palette** | <kbd>⌘/Ctrl+P</kbd> → `Open quick calculator` or `Open system calculator` |
-| **Ribbon icon** | Click the 🧮 in the left sidebar (configurable in settings) |
+| **Side panel** | <kbd>⌘/Ctrl+P</kbd> → `Open calculator panel` (docks in right sidebar) |
+| **Floating modal** | <kbd>⌘/Ctrl+P</kbd> → `Open quick calculator (modal)` |
+| **System calc** | <kbd>⌘/Ctrl+P</kbd> → `Open system calculator` |
+| **Ribbon icon** | Click 🧮 in the left sidebar (configurable in settings) |
 
 ### Keyboard shortcuts *inside the calculator*
 
@@ -102,7 +67,7 @@
 |:------:|-------------|
 | `Basic▾` / `Sci▾` | Toggle between Basic and Scientific modes |
 | `DEG` / `RAD` | Switch angle units *(Scientific mode only)* |
-| 📝 | Insert expression = result into the active note |
+| 📝 | Insert expression = result into active note + copy to clipboard |
 | 📋 | Copy expression as LaTeX to clipboard |
 | ⏱ | Open calculation history |
 | ✕ | Close the calculator |
@@ -110,9 +75,24 @@
 ### On mobile 📱
 
 - Tap buttons like a regular calculator
-- Or tap the **text input** field below the memory bar to type expressions with the keyboard
+- Or tap the **text input** field above the grid to type with the keyboard
 - Press **Enter** to evaluate and dismiss the keyboard
 - Full-width layout optimized for phone screens
+
+---
+
+## 💯 Percentage calculations
+
+The `%` operator works like a real calculator:
+
+| You type | Result | How it works |
+|----------|--------|-------------|
+| `100+21%` | **121** | 100 + (21% of 100) |
+| `100−21%` | **79** | 100 − (21% of 100) |
+| `50×10%` | **5** | 10% of 50 |
+| `200÷10%` | **2000** | 200 ÷ 0.10 |
+| `21%` | **0.21** | Standalone percentage |
+| `10%3` | **1** | Modulo — not treated as percentage |
 
 ---
 
@@ -135,8 +115,8 @@ Paste into any Obsidian note — MathJax renders it beautifully.
 
 | Setting | Description | Default |
 |---------|-------------|---------|
-| **Ribbon icon action** | What happens when you click the ribbon icon | `Open system calculator` |
-| **Insert template** | Format used when inserting into a note. Use `{{expression}}` and `{{result}}` | `` `{{expression}}` = **{{result}}** `` |
+| **Ribbon icon action** | System calculator, modal, or side panel | `Open system calculator` |
+| **Insert template** | Format for 📝 insert. Uses `{{expression}}` and `{{result}}` | `` `{{expression}}` = **{{result}}** `` |
 
 ### Template examples
 
@@ -149,9 +129,6 @@ $sin(45)$ = 0.7071
 
 # Plain text
 sin(45) = 0.7071
-
-# Task list
-- [ ] `sin(45)` → **0.7071**
 ```
 
 ---
@@ -203,9 +180,7 @@ npm run dev     # watch mode — rebuilds on save
 
 ## 🤝 Contributing
 
-Pull requests welcome! If you find a bug or have a feature idea, please [open an issue](https://github.com/jphermans/obsidian-quick-calculator/issues).
-
-Before submitting, please ensure:
+Pull requests welcome! [Open an issue](https://github.com/jphermans/obsidian-quick-calculator/issues).
 
 - [ ] Build passes: `npm run build` (zero errors)
 - [ ] No `eval()`, `new Function()`, or `innerHTML` usage
