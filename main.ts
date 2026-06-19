@@ -321,6 +321,7 @@ class CalculatorModal extends Modal {
   private memoryDisplay!: HTMLSpanElement;
 
   private expression = "";
+  private lastExpression = ""; // preserved for insert/copy after evaluation
   private lastResult = "";
   private mode: CalcMode = "basic";
   private angleMode: AngleMode = "deg";
@@ -662,8 +663,9 @@ class CalculatorModal extends Modal {
   // ─── Insert into note ─────────────────────────────────────
 
   private insertIntoNote_(): void {
-    const val = this.expression || this.lastResult;
-    if (!val) {
+    const expr = this.expression || this.lastExpression;
+    const result = this.lastResult || "";
+    if (!expr && !result) {
       new Notice("Nothing to insert.");
       return;
     }
@@ -674,13 +676,10 @@ class CalculatorModal extends Modal {
       return;
     }
 
-    const latex = ExpressionParser.toLatex(this.expression || this.lastResult);
-    const result = this.lastResult || "";
-
     // Resolve template
     let text = this.settings.insertTemplate || "`{{expression}}` = **{{result}}**";
     text = text
-      .replace(/\{\{expression\}\}/g, this.expression || this.lastResult)
+      .replace(/\{\{expression\}\}/g, expr)
       .replace(/\{\{result\}\}/g, result);
 
     const editor = view.editor;
@@ -688,15 +687,15 @@ class CalculatorModal extends Modal {
     editor.replaceRange(text + "\n", cursor);
     editor.setCursor({ line: cursor.line + 1, ch: 0 });
 
-    // Also copy as plain text (e.g. "1+1 = 2")
-    const plainFormula = (this.expression || this.lastResult) + (result ? " = " + result : "");
+    // Also copy as plain text (e.g. "88+12 = 100")
+    const plainFormula = expr + (result ? " = " + result : "");
     this.writeClipboard_(plainFormula, "Inserted into note & copied to clipboard.");
   }
 
   // ─── Copy LaTeX ───────────────────────────────────────────
 
   private copyLatex_(): void {
-    const expr = this.expression || this.lastResult;
+    const expr = this.expression || this.lastExpression;
     if (!expr) {
       new Notice("Nothing to copy.");
       return;
@@ -739,6 +738,7 @@ class CalculatorModal extends Modal {
 
   private clear(): void {
     this.expression = "";
+    this.lastExpression = "";
     this.lastResult = "";
     this.renderDisplay_();
   }
@@ -776,6 +776,7 @@ class CalculatorModal extends Modal {
       const result = this.parser.evaluate(expr, this.angleMode);
       const rounded = parseFloat(result.toPrecision(12));
       const resultStr = String(rounded);
+      this.lastExpression = expr;
       this.lastResult = resultStr;
       this.display.setText(resultStr);
       this.expression = "";
@@ -882,8 +883,9 @@ class CalculatorModal extends Modal {
     for (const entry of this.history) {
       const row = list.createDiv("qc-history-row");
       row.addEventListener("click", () => {
-        this.expression = entry.result;
-        this.lastResult = "";
+        this.expression = "";
+        this.lastExpression = entry.expression;
+        this.lastResult = entry.result;
         this.renderDisplay_();
         overlay.remove();
         if (!Platform.isMobile) {
