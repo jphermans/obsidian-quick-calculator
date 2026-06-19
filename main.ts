@@ -1245,7 +1245,7 @@ class QuickCalculatorSettingTab extends PluginSettingTab {
 
     // ── Credentials ──
     const creds = containerEl.createDiv("qc-settings-creds");
-    creds.createEl("span", { text: "v1.2.4", cls: "qc-settings-badge" });
+    creds.createEl("span", { text: "v1.2.6", cls: "qc-settings-badge" });
     creds.createEl("span", { text: "JPHsystems", cls: "qc-settings-badge" });
     creds.createEl("span", { text: "MIT", cls: "qc-settings-badge" });
 
@@ -1322,7 +1322,7 @@ class QuickCalculatorSettingTab extends PluginSettingTab {
     // ── Footer ──
     const footer = containerEl.createDiv("qc-settings-footer");
     footer.createEl("p", {
-      text: "Quick Calculator v1.2.4 · © 2026 JPHsystems · MIT License",
+      text: "Quick Calculator v1.2.6 · © 2026 JPHsystems · MIT License",
       cls: "setting-item-description",
     });
     footer.createEl("p", {
